@@ -8,6 +8,9 @@ const app = express();
 const port = process.env.PORT || 8080;
 const corsOptions: CorsOptions = {
     origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false,
     optionsSuccessStatus: 200
 };
 
@@ -17,6 +20,10 @@ app.use(cors(corsOptions));
 // Registering all routes through the controllers
 RegisterRoutes(app);
 
-app.use("/api-docs", serve, setup(swaggerDocument));
+app.use("/api-docs", serve, setup(swaggerDocument, {
+    swaggerOptions: {
+        persistAuthorization: false,
+    }
+}));
 
 app.listen(port, () => console.log("Listening on port", port));
